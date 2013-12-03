@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+		<meta charset="utf-8">
+		<title>Marker Symbols - Esri JS API</title>
+		<style>
+			html, body, #map-canvas {
+				padding:0;
+		        margin:0;
+		        height: 100%;
+		        width: 100%;
+			}
+			#map-timer {
+				position: absolute;
+		        width: 200px;
+		        top: 10px;
+		        right: 10px;
+		    }
+		</style>
+		
+		<link rel="stylesheet" href="//js.arcgis.com/3.7/js/esri/css/esri.css">
+
+		<script>
+			var dojoConfig = {
+				async : true,
+				packages : [{
+					name : "dijits",
+					location : location.pathname.replace(/\/[^/]+$/, "") + "/dijit"
+				}]
+			};
+		</script>
+		
+		<script src="//js.arcgis.com/3.7/"></script>
+		<script>
+			require([
+				"dojo/ready",
+				"dojo/dom", 
+				"dojo/request/xhr", 
+				"dojo/_base/lang",
+				"dojo/_base/array",
+				"esri/map",
+				"esri/graphic",
+				"dijits/MapTimer"], function(ready, dom, xhr, lang, array, Map, Graphic, MapTimer) {	
+				ready(function() {				
+					var map = new Map("map-canvas", {
+			          basemap: "streets",
+			          center: [-56.049, 38.485],
+			          zoom: 3
+			        });
+			        
+			        var mapTimer = new MapTimer({}, dom.byId("map-timer"));
+			        mapTimer.startup();
+			        
+					map.on("pan-start", lang.hitch(mapTimer, "updateTime")); 
+					map.on("pan-end", lang.hitch(mapTimer, "updateTime")); 
+					map.on("zoom-start", lang.hitch(mapTimer, "updateTime")); 
+					map.on("zoom-end", lang.hitch(mapTimer, "updateTime")); 								
+					map.on("load", requestData);
+					
+					function requestData() {
+		                xhr("data/cities.txt", {
+					    	handleAs: "json"
+					  	}).then(function(data){
+					  		var image = "assets/images/i_pin.png", count = 0;
+					  		
+					    	array.forEach(data.features, function(feature) {
+					    		var marker = new Graphic({
+					    			"geometry": {"x": feature.geometry.x, "y": feature.geometry.y, "spatialReference": {"wkid": 4326}},
+					    			"symbol": { "type": "esriPMS", "url": image, "contentType": "image/png", "width": 40, "height": 40}
+					    		});
+					    		
+					    		map.graphics.add(marker);
+					    		count++;
+					    	});
+					    	
+					    	mapTimer.setGraphicCount(count);
+					    	
+					  	}, function(err){
+			                console.log(err);
+					  	});
+	            	}	
+				}); 	
+			});
+		</script>
+	</head>
+	<body>
+		<div id="map-canvas">
+			<div id="map-timer"></div>
+		</div>
+	</body>
+</html>
+

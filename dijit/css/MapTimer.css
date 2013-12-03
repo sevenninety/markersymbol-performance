@@ -1,0 +1,13 @@
+.maptimer {
+	position: absolute;
+	height: 120px;
+	font-family: arial;
+	margin: 5px;
+	padding: 5px;
+	z-index: 40;
+	background: #fff;
+	color: #444;
+	-moz-box-shadow: 0 0 5px #888;
+	-webkit-box-shadow: 0 0 5px #888;
+	box-shadow: 0 0 5px #888;
+}
