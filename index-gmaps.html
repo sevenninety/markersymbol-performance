@@ -64,7 +64,7 @@
 		                xhr("data/cities.txt", {
 					    	handleAs: "json"
 					  	}).then(function(data){
-					  		var image = "assets/images/i_pin.png", count = 0;
+					  		var image = { url: "assets/images/map_pin_blue32x45.png" }, count = 0;
 					  		
 					    	array.forEach(data.features, function(feature) {
 					    		var marker = new google.maps.Marker({

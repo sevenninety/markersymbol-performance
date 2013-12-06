@@ -62,12 +62,12 @@
 		                xhr("data/cities.txt", {
 					    	handleAs: "json"
 					  	}).then(function(data){
-					  		var image = "assets/images/i_pin.png", count = 0;
+					  		var image = "assets/images/map_pin_blue32x45.png", count = 0;
 					  		
 					    	array.forEach(data.features, function(feature) {
 					    		var marker = new Graphic({
 					    			"geometry": {"x": feature.geometry.x, "y": feature.geometry.y, "spatialReference": {"wkid": 4326}},
-					    			"symbol": { "type": "esriPMS", "url": image, "contentType": "image/png", "width": 40, "height": 40}
+					    			"symbol": { "type": "esriPMS", "url": image, "contentType": "image/png", "width": 32, "height": 45}
 					    		});
 					    		
 					    		map.graphics.add(marker);
